@@ -10,6 +10,7 @@ public class Publisher extends StatefulClusterMember implements Receiver {
 
     private int maxMessages = -1;
     private String fileName;
+    private JChannel channel;
     
     public Publisher(String configurationUrl,
 		     String clusterName,
@@ -22,14 +23,13 @@ public class Publisher extends StatefulClusterMember implements Receiver {
 
     @Override
     public void start() throws Exception {
-	JChannel channel = this.getChannel();
-	channel = new JChannel(this.getConfigurationUrl())
-	    .setReceiver(this);
-	channel.setDiscardOwnMessages(true);
-        channel.connect(this.getClusterName());
-        channel.getState(null, this.getTimeout());
+	this.channel = new JChannel(this.getConfigurationUrl())
+	    .setReceiver(this); 
+	this.channel.setDiscardOwnMessages(true);
+	this.channel.connect(this.getClusterName());
+        this.channel.getState(null, this.getTimeout());
         this.eventLoop();
-        channel.close();
+        this.channel.close();
     }
 
     public void receive(Message msg) {
@@ -52,18 +52,33 @@ public class Publisher extends StatefulClusterMember implements Receiver {
 		ItchMessage itchMsg = unframe.get();
 		if (null != itchMsg) {
 		    Message msg=new ObjectMessage(null, itchMsg);
-		    this.getChannel().send(msg);
+		    this.channel.send(msg);
 		} else {
 		    break;
 		}
 	    }
 	    catch(Exception e) {
 		e.printStackTrace();
+		break;
 	    }
 	}
     }
 
     public static void main(String[] args) {
-
+	if (args.length < 4) {
+	    System.exit(1);
+	} else {
+	    Publisher pub = new Publisher(args[0],
+					  args[1],
+					  args[2],
+					  Integer.parseInt(args[3]));
+	    try {
+		pub.start();
+	    } catch (Exception ex) {
+		ex.printStackTrace();
+		System.exit(1);
+	    }
+	}
+	System.exit(0);
     }
 }
