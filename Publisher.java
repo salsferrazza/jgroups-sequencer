@@ -6,7 +6,7 @@ import java.net.URL;
 import java.io.*;
 import java.util.*;
 
-public class Publisher extends StatefulClusterMember implements Receiver {
+public class Publisher extends StatefulClusterMember {
 
     private int maxMessages = -1;
     private String fileName;
@@ -32,6 +32,7 @@ public class Publisher extends StatefulClusterMember implements Receiver {
         this.channel.close();
     }
 
+    @Override
     public void receive(Message msg) {
 	System.err.println("received: " + msg);
     }
@@ -51,13 +52,11 @@ public class Publisher extends StatefulClusterMember implements Receiver {
 	    try {
 		ItchMessage itchMsg = unframe.get();
 		if (null != itchMsg) {
-		    Message msg=new ObjectMessage(null, itchMsg);
-		    this.channel.send(msg);
+		    this.channel.send(null, itchMsg);
 		} else {
 		    break;
 		}
-	    }
-	    catch(Exception e) {
+	    } catch(Exception e) {
 		e.printStackTrace();
 		break;
 	    }
