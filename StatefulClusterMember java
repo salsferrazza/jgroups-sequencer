@@ -8,12 +8,12 @@ import java.util.*;
 
 public abstract class StatefulClusterMember implements Receiver {
     
-    final List<Message> state=new LinkedList<>();
+    final List<ItchMessage> state=new LinkedList<>();
 
     private JChannel channel;
     private String configurationUrl;
     private String clusterName;
-    private static final int timeout = 10000;
+    private static final int timeout = 0; // don't timeout
 
     public int getTimeout() {
 	return this.timeout;
@@ -41,22 +41,23 @@ public abstract class StatefulClusterMember implements Receiver {
     }
 
     public void getState(OutputStream output) throws Exception {
-        synchronized(state) {
-            Util.objectToStream(state, new DataOutputStream(output));
+	System.err.println("State requested, have " + this.state.size() + " messages");
+        synchronized(this.state) {
+	    for (ItchMessage msg: this.state) {
+		Util.objectToStream(msg, new DataOutputStream(output));
+	    }
         }
     }
 
     public void setState(InputStream input) throws Exception {
-        List<Message> list=Util.objectFromStream(new DataInputStream(input));
-        synchronized(this.state) {
-            this.state.clear();
-            this.state.addAll(list);
-        }
-        System.err.println(list.size() + " messages in session state");
-        list.forEach(System.out::println);
+	System.err.println("State being set, have " + this.state.size() + " messages");
+	while (input.available() > 0) {
+	    ItchMessage msg = Util.objectFromStream(new DataInputStream(input));
+	    this.incrementState(msg);
+	}
     }
 
-    public void incrementState(Message msg) {
+    public void incrementState(ItchMessage msg) {
 	// FIXME: if we enforce a single threaded JVM per cluster member
 	//        then no need to synchronize
 	synchronized(this.state) {
@@ -74,4 +75,5 @@ public abstract class StatefulClusterMember implements Receiver {
         this.eventLoop();
         this.channel.close();
     }
+
 }
