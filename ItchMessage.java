@@ -3,6 +3,8 @@ import java.io.*;
 
 public class ItchMessage implements Serializable {
 
+    static final long serialVersionUID = 42L;
+
     private byte[] bytes;
     private char messageType;
     private long sequenceNumber; 
