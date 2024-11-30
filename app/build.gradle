@@ -19,19 +19,27 @@ dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13.2'
 
-    // This dependency is used by the application.
-    implementation 'com.google.guava:guava:32.1.1-jre'
     implementation 'org.jgroups:jgroups:5.3.13.Final'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(20)
     }
 }
 
 application {
     // Define the main class for the application.
     mainClass = 'jgroups.sequencer.App'
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": "jgroups.sequencer.App"
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
