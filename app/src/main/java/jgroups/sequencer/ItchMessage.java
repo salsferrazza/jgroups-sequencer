@@ -1,3 +1,5 @@
+package jgroups.sequencer;
+
 import java.util.*;
 import java.io.*;
 

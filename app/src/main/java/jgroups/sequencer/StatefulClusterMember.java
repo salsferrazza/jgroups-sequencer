@@ -1,3 +1,5 @@
+package jgroups.sequencer;
+
 import org.jgroups.*;
 import org.jgroups.protocols.*;
 import org.jgroups.util.Util;
