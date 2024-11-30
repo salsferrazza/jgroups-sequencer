@@ -39,7 +39,6 @@ public class Subscriber extends StatefulClusterMember {
 	    configUrl = args[0];
 	    clusterName = args[1];
 	    Subscriber sub = new Subscriber(configUrl, clusterName);
-	    System.err.println(sub);
 	    try {
 		sub.start();
 	    } catch (Exception ex) {
