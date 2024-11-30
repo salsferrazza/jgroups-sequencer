@@ -64,22 +64,4 @@ public class Publisher extends StatefulClusterMember {
 	    }
 	}
     }
-
-    public static void main(String[] args) {
-	if (args.length < 4) {
-	    System.exit(1);
-	} else {
-	    Publisher pub = new Publisher(args[0],
-					  args[1],
-					  args[2],
-					  Integer.parseInt(args[3]));
-	    try {
-		pub.start();
-	    } catch (Exception ex) {
-		ex.printStackTrace();
-		System.exit(1);
-	    }
-	}
-	System.exit(0);
-    }
 }

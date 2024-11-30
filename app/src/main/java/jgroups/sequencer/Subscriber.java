@@ -29,25 +29,4 @@ public class Subscriber extends StatefulClusterMember {
 	    iex.printStackTrace();
 	}
     }
-
-    public static void main(String[] args) {
-
-	String configUrl;
-	String clusterName;
-
-	if (args.length == 2) {
-	    configUrl = args[0];
-	    clusterName = args[1];
-	    Subscriber sub = new Subscriber(configUrl, clusterName);
-	    try {
-		sub.start();
-	    } catch (Exception ex) {
-	    	ex.printStackTrace();
-		System.exit(1);
-	    }
-	} else {
-	    System.exit(1);
-	}
-	System.exit(0);
-    }
 }
