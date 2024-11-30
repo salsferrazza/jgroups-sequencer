@@ -57,34 +57,4 @@ public class LengthPrefixedUnframer implements Supplier<ItchMessage> {
 	return new ItchMessage(bytes, counter); 
 	
     }
-    
-    /**
-    public static void main(String[] args) {
-	try {
-	    LengthPrefixedUnframer unframe = new LengthPrefixedUnframer(args.length == 0
-									? System.in
-									: new FileInputStream(args[0]));
-
-	    StatusThread status = new StatusThread(unframe);
-	    Thread t = new Thread(status);
-	    t.start();
-	    
-	    long count = Stream.generate(() -> unframe.get())
-		.takeWhile(Objects::nonNull)
-		.collect(Collectors.counting());
-
-	    status.halt();
-	    t = null;
-
-	    System.exit(0);
-	    
-	} catch (FileNotFoundException fnf) {
-	    System.err.println("File " + args[0] + " not found");
-	    System.exit(1);
-	} catch (Exception ex) {
-	    ex.printStackTrace();
-	    System.exit(1);
-	} 
-    }    
-    */
 }
