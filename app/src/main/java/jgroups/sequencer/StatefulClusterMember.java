@@ -78,7 +78,7 @@ public abstract class StatefulClusterMember implements Receiver {
     public abstract void eventLoop();
 
     public void start() throws Exception {
-        this.channel=new JChannel(this.getConfigurationUrl()).setReceiver(this);
+        this.channel = new JChannel(this.getConfigurationUrl()).setReceiver(this);
         this.channel.connect(this.getClusterName());
         this.channel.getState(null, this.getTimeout());
         this.eventLoop();

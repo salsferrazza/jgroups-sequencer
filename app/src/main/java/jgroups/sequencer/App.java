@@ -4,6 +4,7 @@
 package jgroups.sequencer;
 
 public class App {
+    
     public static void main(String[] args) {
 
 	String configUrl = null;
@@ -42,9 +43,6 @@ public class App {
 	    ex.printStackTrace();
 	    System.exit(1);
 	}
-
 	System.exit(0);
-
-	
     }
 }
